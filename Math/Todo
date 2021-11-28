@@ -5,10 +5,12 @@ Math:
         ☐ Jacobian
         ☐ Orientation
         ☐ Metric
+        ☐ Gradient
         ☐ Normal
-        ☐ Vorticity
         ☐ Curl
         ☐ Divergence
+    Forms:
+        ☐ Directional Derivative
     Distance functions:
         ☐ Plane
         ☐ Torus
@@ -23,3 +25,9 @@ Math:
     Parallel Transport:
         ☐ Torus
         ☐ Sphere
+
+Rendering:
+    ☐ Heightmap
+    ☐ Torus
+    ☐ Sphere
+    ☐ Lines
