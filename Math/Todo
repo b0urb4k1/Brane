@@ -1,0 +1,25 @@
+Math:
+    2 Manifold:
+        ☐ Heightmap
+    Intrinsics:
+        ☐ Jacobian
+        ☐ Orientation
+        ☐ Metric
+        ☐ Normal
+        ☐ Vorticity
+        ☐ Curl
+        ☐ Divergence
+    Distance functions:
+        ☐ Plane
+        ☐ Torus
+        ☐ Sphere
+        ☐ Moebius Strip
+        ☐ Klein Bottle
+    Shooting:
+        ☐ Runge Kutta 1
+        ☐ Runge Kutta 2
+        ☐ Runge Kutta 3
+        ☐ Runge Kutta 4
+    Parallel Transport:
+        ☐ Torus
+        ☐ Sphere
