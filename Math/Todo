@@ -25,6 +25,13 @@ Math:
     Parallel Transport:
         ☐ Torus
         ☐ Sphere
+    Voronoi:
+        ☐ Plane
+        ☐ Torus
+        ☐ Sphere
+    Interpolation:
+        ☐ Cubic Hermite Spline
+        ☐ Natural Neighbour Interpolation
 
 Rendering:
     ☐ Heightmap
