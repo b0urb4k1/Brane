@@ -11,4 +11,6 @@ public class Clamp01
 
     public static implicit operator float(Clamp01 value) =>
         value.t;
+    public static implicit operator Clamp01(float value) =>
+        new Clamp01(value);
 }
