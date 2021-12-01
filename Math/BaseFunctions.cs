@@ -16,7 +16,7 @@ public static class BaseFunctions
     public static float ddH00ddt(Clamp01 t) =>
         12f * t - 6f;
 
-    public static float EvaluateSupportFunction(System.Numerics.Vector2 position, Support support)
+    public static float Support(System.Numerics.Vector2 position, Support support)
     {
         Vector2InUnitCircle difference = (support.position - position) / support.influence;
 
@@ -26,7 +26,7 @@ public static class BaseFunctions
         return height;
     }
 
-    public static System.Numerics.Vector2 EvaluateSupportFunctionGradient(System.Numerics.Vector2 position, Support support)
+    public static System.Numerics.Vector2 SupportGradient(System.Numerics.Vector2 position, Support support)
     {
         Vector2InUnitCircle difference = (support.position - position) / support.influence;
 
@@ -40,7 +40,7 @@ public static class BaseFunctions
         return gradient;
     }
 
-    public static (System.Numerics.Vector3 tangentX, System.Numerics.Vector3 tangentY) EvaluateSupportFunctionTangents(System.Numerics.Vector2 position, Support support)
+    public static (System.Numerics.Vector3 tangentX, System.Numerics.Vector3 tangentY) SupportTangents(System.Numerics.Vector2 position, Support support)
     {
         Vector2InUnitCircle difference = (support.position - position) * support.influence;
 
@@ -62,12 +62,31 @@ public static class BaseFunctions
         return (tangentX, tangentY);
     }
 
-    public static System.Numerics.Vector3 EvaluateSupportFunctionNormal(System.Numerics.Vector2 position, Support support)
+    public static System.Numerics.Vector3 SupportNormal(System.Numerics.Vector2 position, Support support)
     {
-        var (tangentX, tangentY) = EvaluateSupportFunctionTangents(position, support);
+        var (tangentX, tangentY) = SupportTangents(position, support);
         var normal =
             System.Numerics.Vector3.Normalize(System.Numerics.Vector3.Cross(tangentX, tangentY));
 
         return normal;
+    }
+
+    public static System.Numerics.Vector3 Project(System.Numerics.Vector3 normal, System.Numerics.Vector3 vector) =>
+        vector - System.Numerics.Vector3.Dot(normal, vector) * normal;
+
+    public static System.Numerics.Vector2 ChangeBase((System.Numerics.Vector3 e1, System.Numerics.Vector3 e2) basis, System.Numerics.Vector3 vector)
+    {
+        var normal =
+            System.Numerics.Vector3.Cross(basis.e1, basis.e2);
+        var projectedVector =
+            Project(normal, vector);
+        var projectionE1 =
+            System.Numerics.Vector3.Dot(basis.e1, projectedVector);
+        var projectionE2 =
+            System.Numerics.Vector3.Dot(basis.e2, projectedVector);
+        var tangentSpaceCoordinates =
+            new System.Numerics.Vector2(projectionE1, projectionE2);
+
+        return tangentSpaceCoordinates;
     }
 }
