@@ -25,15 +25,15 @@ public class Tests
                     )
                 );
         var middle =
-            Math.BaseFunctions.EvaluateSupportFunctionTangents
+            Math.BaseFunctions.SupportTangents
                 (new Vector2(0f, 0f), support);
 
         var left =
-            Math.BaseFunctions.EvaluateSupportFunctionTangents
+            Math.BaseFunctions.SupportTangents
                 (new Vector2(-1f, 0f), support);
 
         var halfLeft =
-            Math.BaseFunctions.EvaluateSupportFunctionTangents
+            Math.BaseFunctions.SupportTangents
                 (new Vector2(-.5f, 0f), support);
     }
 
@@ -62,7 +62,7 @@ public class Tests
                         )
                     );
         var jacobianStart =
-            Math.BaseFunctions.EvaluateSupportFunctionTangents
+            Math.BaseFunctions.SupportTangents
                 (path.First(), support);
         var projectedTangent =
             System.Numerics.Vector3.Normalize(jacobianStart.tangentY);
@@ -74,14 +74,56 @@ public class Tests
         foreach(var position in path.Skip(1))
         {
             var currentNormal =
-                Math.BaseFunctions.EvaluateSupportFunctionNormal
+                Math.BaseFunctions.SupportNormal
                     (position, support);
             projectedTangent =
-                System.Numerics.Vector3.Normalize(projectedTangent - System.Numerics.Vector3.Dot(currentNormal, projectedTangent) * currentNormal);
+                System.Numerics.Vector3.Normalize
+                    (Math.BaseFunctions.Project(currentNormal, projectedTangent));
 
             tangents.Add(projectedTangent);
         }
 
         Assert.Pass();
+    }
+
+    [Test]
+    public void ParallelTransportShooting()
+    {
+        var support =
+            new Math.Support
+                ( 1f
+                , 1f
+                , new Vector2
+                    ( 0f
+                    , 0f
+                    )
+                );
+        var path =
+            new List<Vector2>
+                ( new [] { new Vector2(.5f, -1f) } );
+        var currentVelocity = new Vector2(0f, 1f);
+        var startingJacobian =
+            Math.BaseFunctions.SupportTangents(path.First(), support);
+        var currentTangent =
+            startingJacobian.tangentY;
+
+        do
+        {
+            var newPosition =
+                path.Last() + currentVelocity * .1f;
+            var newJacobian =
+                Math.BaseFunctions.SupportTangents
+                    ( newPosition, support );
+            var newNormal =
+                Math.BaseFunctions.SupportNormal
+                    ( newPosition, support );
+            currentTangent =
+                Math.BaseFunctions.Project(newNormal, currentTangent);
+            // alten
+            currentVelocity =
+                Math.BaseFunctions.ChangeBase(newJacobian, currentTangent);
+
+            path.Add(newPosition);
+        } while(path.Count() < 100);
     }
 }
